@@ -3,6 +3,9 @@
 
 .navElement {
     @apply text-center;
+    @apply text-xs;
+    @apply font-bold;
+    @apply tracking-wider;
     @apply block;
     @apply py-4;
     @apply px-4;
@@ -21,6 +24,12 @@
 
 .disabledNavElement:hover{
     @apply bg-gray-600;
+}
+
+@screen sm {
+    .navElement {
+        @apply text-lg;
+    }
 }
 
 @tailwind utilities;

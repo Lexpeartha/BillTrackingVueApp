@@ -625,6 +625,9 @@ video {
 
 .navElement {
   text-align: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
   display: block;
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -645,6 +648,12 @@ video {
 
 .disabledNavElement:hover{
   background-color: #718096;
+}
+
+@media (min-width: 640px) {
+  .navElement {
+    font-size: 1.125rem;
+  }
 }
 
 .sr-only {
