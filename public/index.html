@@ -11,17 +11,12 @@
 <body class="bg-purple-300">
     <!-- Bill Tracker App -->
     <div id="app">
-        <div id="tabs" class="bg-purple-600">
+        <div id="tabs" class="bg-purple-500">
             <ul class="flex">
-                <li class="flex-1 mr-3">
-                  <a class="text-center block py-4 px-4 bg-purple-600 hover:bg-purple-700 text-gray-200" href="#">About this app</a>
+                <li class="flex-1"
+                    v-for="(nav,index) in NavBarElements">
+                  <a class="text-center block py-4 px-4 bg-purple-500 hover:bg-purple-600 text-gray-200" v-on:click="updateNav(index)" href="#">{{ nav }}</a>
                 </li>
-                <li class="flex-1 mr-3">
-                  <a class="text-center block py-4 px-4 bg-purple-600 hover:bg-purple-700 text-gray-200" href="#">Create a bill</a>
-                </li>
-                <li class="flex-1 mr-3">
-                    <a class="text-center block py-4 px-4 bg-purple-600 hover:bg-purple-700 text-gray-200" href="#">View your bills</a>
-                  </li>
                 <li class="text-center flex-1">
                   <a class="text-center block py-4 px-4 bg-gray-500 hover:bg-gray-600 text-gray-200 cursor-not-allowed" href="#">
                       Contribute to this project</a>
