@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
+
+.navElement {
+    @apply text-center;
+    @apply block;
+    @apply py-4;
+    @apply px-4;
+    @apply bg-purple-500;
+    @apply text-gray-200;
+}
+
+.navElement:hover {
+    @apply bg-purple-600;
+}
+
+.disabledNavElement{
+    @apply bg-gray-500;
+    @apply cursor-not-allowed;
+}
+
+.disabledNavElement:hover{
+    @apply bg-gray-600;
+}
+
 @tailwind utilities;

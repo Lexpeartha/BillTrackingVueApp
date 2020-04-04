@@ -623,6 +623,30 @@ video {
   }
 }
 
+.navElement {
+  text-align: center;
+  display: block;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background-color: #9f7aea;
+  color: #edf2f7;
+}
+
+.navElement:hover {
+  background-color: #805ad5;
+}
+
+.disabledNavElement{
+  background-color: #a0aec0;
+  cursor: not-allowed;
+}
+
+.disabledNavElement:hover{
+  background-color: #718096;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

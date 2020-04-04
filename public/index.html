@@ -13,18 +13,17 @@
     <div id="app">
         <div id="tabs" class="bg-purple-500">
             <ul class="flex">
-                <li class="flex-1"
+                <li class="flex-1 text-center"
                     v-for="(nav,index) in NavBarElements">
-                  <a class="text-center block py-4 px-4 bg-purple-500 hover:bg-purple-600 text-gray-200" v-on:click="updateNav(index)" href="#">{{ nav }}</a>
-                </li>
-                <li class="text-center flex-1">
-                  <a class="text-center block py-4 px-4 bg-gray-500 hover:bg-gray-600 text-gray-200 cursor-not-allowed" href="#">
-                      Contribute to this project</a>
+                        <a class="navElement" 
+                        v-on:click="updateNav(index)"
+                        :class="{disabledNavElement: nav.isDisabled}"
+                        href="#">{{ nav.name }}</a>
                 </li>
             </ul>
         </div>
         <div id="sap">
-
+            
         </div>
     </div>
 </body>
