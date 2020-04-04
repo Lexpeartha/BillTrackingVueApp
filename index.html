@@ -22,12 +22,58 @@
                 </li>
             </ul>
         </div>
-    <about v-show="showFromNavSelection('About')"></about>
-    <add-bill v-show="showFromNavSelection('Create a bill')" 
-        @send-bill="addToBills">
-    </add-bill>
-    <view-bills v-show="showFromNavSelection('View your bills')" :bills="Bills"></view-bills>
-    <contribute v-show="showFromNavSelection('Contribute to this project')"></contribute>
+        <about v-show="showFromNavSelection('About')"></about>
+        <add-bill v-show="showFromNavSelection('Create a bill')" 
+            @send-bill="addToBills">
+        </add-bill>
+        <view-bills v-show="showFromNavSelection('View your bills')" :bills="Bills"></view-bills>
+        <contribute v-show="showFromNavSelection('Contribute to this project')"></contribute>
     </div>
 </body>
 </html>
+
+<!--
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+
+    <div class="max-w-sm rounded-lg overflow-hidden shadow-lg bg-white m-4">
+        <div class="flex flex-col min-h-full">
+        <div class="px-6 py-4 border-b">
+            <div class="text-xl text-center">Block</div>
+        </div>
+        <div class="px-6 py-10 flex-grow">
+            <p class="text-gray-700 text-base">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.
+            </p>
+        </div>
+        <div class="px-5 py-3 border-t bg-gray-100 flex justify-end">
+            <button class="btn-gradient-default text-gray-600 font-medium text-sm py-1 px-5 rounded mr-3">Cancel</button>
+            <button class="btn-gradient-danger text-white font-medium text-sm py-1 px-5 rounded">Block</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+
+<div>
+    <h1 class="text-center text-4xl">View your bills</h1>
+    <br>
+    <p v-if="!bills.length">There are no added bills!</p>
+    <div v-for="(bill, index) in bills"
+        class="max-w-sm rounded overflow-hidden shadow-lg">
+        <img class="w-full" src="https://bit.ly/34bAw9E" alt="Sunset in the mountains">
+        <div class="px-6 py-4">
+            <div class="text-gray-700 font-bold text-xl mb-2">{{ bill.name }}</div>
+            <p class="text-gray-700 text-base">
+            Description: {{ bill.description }} <br>
+            Due to: {{ bill.date }}
+            </p>
+        </div>
+        <div class="px-6 py-4">
+            <span
+            class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">{{ bill.money + '$' }}</span>
+            <span v-if="bill.method != null"
+            class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">{{ bill.method }}</span>
+        </div>
+    </div>
+</div>
+-->

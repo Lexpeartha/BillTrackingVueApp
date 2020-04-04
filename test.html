@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./public/styles/styles.css"/>
+    <title>Document</title>
+</head>
+<body>
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 flex">
+        <div v-show="!bills.length">
+            <p class="text-center">Couldn't find any bills!</p>
+        </div>
+        <div v-for="(bill, index) in bills"
+            class="max-w-sm rounded-lg overflow-hidden shadow-sm bg-purple-400 m-4">
+            <div class="flex flex-col min-h-full">
+            <div class="px-6 py-4 border-b border-gray-800">
+                <div class="text-2xl text-center text-gray-800">{{ bill.name }}</div>
+                <br>
+                <div class="flex text-gray-700">
+                    <p class="flex-row text-sm">Tags:</p>
+                    <span v-if="bill.money != null"
+                        class="inline-block bg-gray-200 rounded-full px-2 py-0 text-sm italic text-gray-700 mr-1 ml-1">{{ bill.money + '$' }}</span>
+                    <span v-if="bill.method != null"
+                        class="inline-block bg-gray-200 rounded-full px-2 py-0 text-sm italic text-gray-700 mr-1 ml-1">{{ bill.method }}</span>
+                </div>
+            </div>
+            <div class="px-6 py-8 flex-grow">
+                <p class="text-gray-700 text-left text-xl">
+                    Description:
+                </p>
+                <p class="text-gray-700 text-base">
+                    {{ bill.description }}
+                </p>
+            </div>
+            <div class="px-6 py-8 flex-grow">
+                <p class="text-gray-700 text-left text-xl">
+                    The Bill is due:
+                </p>
+                <p class="text-gray-700 text-base">
+                    {{ bill.date }}
+                </p>
+            </div>
+            <div class="px-5 py-3 border-t border-gray-800 bg-purple-500 flex justify-end">
+                <button class="btn-gradient-default text-gray-800 font-medium text-sm py-1 px-5 rounded mr-3 hover:text-gray-200">Edit</button>
+                <button class="btn-gradient-default text-gray-800 font-medium text-sm py-1 px-5 rounded mr-3 hover:text-gray-200">Delete</button>
+            </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

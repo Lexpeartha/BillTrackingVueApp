@@ -45,7 +45,7 @@ Vue.component('add-bill', {
         <div class="flex flex-wrap -mx-3 mb-6">
             <div class="w-full px-3 mb-6 md:mb-0">
                 <label class="block uppercase tracking-wide text-gray-700 text-center text-base font-bold mb-2" for="grid-bill-name">
-                    Addition notes/description
+                    Additional notes/description
                 </label>
                 <textarea v-model="description"
                     class="appearance-none block w-full bg-gray-200 text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-100"
@@ -125,29 +125,47 @@ Vue.component('view-bills', {
         }
     },
     template: `
-        <div>
-            <h1 class="text-center text-4xl">View your bills</h1>
-            <br>
-            <p v-if="!bills.length">There are no added bills!</p>
-
-            <div v-for="(bill, index) in bills"
-                class="max-w-sm rounded overflow-hidden shadow-lg">
-                <img class="w-full" src="https://bit.ly/34bAw9E" alt="Sunset in the mountains">
-                <div class="px-6 py-4">
-                    <div class="font-bold text-xl mb-2">{{ bill.name }}</div>
-                    <p class="text-gray-700 text-base">
-                    Description: {{ bill.description }} <br>
-                    Due to: {{ bill.date }}
-                    </p>
-                </div>
-                <div class="px-6 py-4">
-                    <span
-                    class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">{{ bill.money }}</span>
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 flex">
+        <div v-show="!bills.length">
+            <p class="text-center">Couldn't find any bills!</p>
+        </div>
+        <div v-for="(bill, index) in bills"
+            class="max-w-sm rounded-lg overflow-hidden shadow-sm bg-purple-400 m-4">
+            <div class="flex flex-col min-h-full">
+            <div class="px-6 py-4 border-b border-gray-800">
+                <div class="text-2xl text-center text-gray-800">{{ bill.name }}</div>
+                <br>
+                <div class="flex text-gray-700">
+                    <p class="flex-row text-sm">Tags:</p>
+                    <span v-if="bill.money != null"
+                        class="inline-block bg-gray-200 rounded-full px-2 py-0 text-sm italic text-gray-700 mr-1 ml-1">{{ bill.money + '$' }}</span>
                     <span v-if="bill.method != null"
-                    class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">{{ bill.method }}</span>
+                        class="inline-block bg-gray-200 rounded-full px-2 py-0 text-sm italic text-gray-700 mr-1 ml-1">{{ bill.method }}</span>
                 </div>
             </div>
+            <div class="px-6 py-8 flex-grow">
+                <p class="text-gray-700 text-left text-xl">
+                    Description:
+                </p>
+                <p class="text-gray-700 text-base">
+                    {{ bill.description }}
+                </p>
+            </div>
+            <div class="px-6 py-8 flex-grow">
+                <p class="text-gray-700 text-left text-xl">
+                    The Bill is due:
+                </p>
+                <p class="text-gray-700 text-base">
+                    {{ bill.date }}
+                </p>
+            </div>
+            <div class="px-5 py-3 border-t border-gray-800 bg-purple-500 flex justify-end">
+                <button class="btn-gradient-default text-gray-800 font-medium text-sm py-1 px-5 rounded mr-3 hover:text-gray-200">Edit</button>
+                <button class="btn-gradient-default text-gray-800 font-medium text-sm py-1 px-5 rounded mr-3 hover:text-gray-200">Delete</button>
+            </div>
+            </div>
         </div>
+    </div>
     `,
     methods: {
 
