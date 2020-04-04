@@ -62,6 +62,7 @@ Vue.component('add-bill', {
                     <select v-model="method"
                         class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-gray-100 focus:border-gray-500"
                         id="grid-state">
+                        <option>Cash</option>
                         <option>Check</option>
                         <option>Online Payment</option>
                         <option>Automated phone call</option>
