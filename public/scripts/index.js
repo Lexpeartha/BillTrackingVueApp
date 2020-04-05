@@ -1,27 +1,31 @@
-var eventBus = new Vue()
-
 Vue.component('about', {
     template: `
-        <div>
-            <h1 class="text-center text-gray-700 text-4xl">About this project</h1>
-            <img src="https://bit.ly/3bPeps7" class="w-2/3 m-auto lg:w-1/2"/>
-            <br>
-            <p class="text-center text-gray-700">
-                This project has been made solely for educational purposes.<br>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.<br>
-                Libero nulla quia, nemo aspernatur, cupiditate error tenetur<br>
-                dolore ex iusto rem maxime soluta aliquam voluptatem praesentium neque, <br>molestiae provident repellat ut!
-            </p>
+    <div>
+        <div style="background-image: url(https://bit.ly/2V25Ljj); height: 75vh" 
+        class="w-full bg-fixed bg-cover bg-no-repeat opacity-75 bg-scroll text-center">
+            <h1 class="text-5xl md:text-6xl pt-3 text-gray-900">About this project</h1>
         </div>
+        <div class="text-center text-purple-800">
+            <div class="text-2xl pt-6 opacity-100">
+                <p>Ever wanted to find quick and easy way to check<br> can you pay all bills you currently have with certain budgets?<br> Or to maintain how many of those bills expired?<br> If so, this app is for you!</p>
+                <br> <br>
+                <p>This is my first project, and I made it only to practice basics of Vue,<br> framework that I have recently picked up. I've learned a lot of things<br> building this app. The source code can be found <a class="text-blue-600" href="https://github.com/NinjaGamer107/BillTracker">here</a></p>
+                <br>
+            </div>
+        </div>
+    </div>
     `,
-    methods: {
-        
+    data: function() {
+        return {
+            
+        };
     }
 })
 
 Vue.component('add-bill', {
     template: `
-    <form class="w-full max-w-lg m-auto mt-8" id="bill-form" @submit.prevent="sendBillSubmit">
+    <form class="w-full max-w-lg m-auto mt-4" id="bill-form" @submit.prevent="sendBillSubmit">
+        <h1 class="text-5xl md:text-6xl text-gray-700 text-center mb-4">Create a bill</h1>
         <div class="flex flex-wrap -mx-3 mb-6">
             <div class="w-full px-3 mb-6 md:mb-0">
                 <label class="block uppercase tracking-wide text-gray-700 text-center text-base font-bold mb-2" for="grid-bill-name">
@@ -86,7 +90,7 @@ Vue.component('add-bill', {
         <br>
         <div class="flex flex-row -mx-3 mb-6">
             <button form="bill-form"
-                class="w-1/2 bg-purple-500 rounded px-3 py-2 m-auto">
+                class="w-1/2 bg-purple-500 rounded px-3 py-2 m-auto hover:text-gray-200 focus:outline-none">
                 Add the bill
             </button>
         </div>
@@ -128,12 +132,24 @@ Vue.component('view-bills', {
         }
     },
     template: `
+<div>
+    <div v-show="!bills.length">
+        <h1 class="text-5xl md:text-6xl text-gray-700 text-center mb-4">There's nothing here to show</h1>
+        <div class="text-center text-purple-800">
+            <div class="text-2xl pt-6 opacity-100">
+                <p>Having trouble using this app? Just make a bill, and all your bills will appear<br> here along with control panel! From there, you should <br> be able to check everything you need :)</p>
+                <br> <br>
+                <p>This is my first project, and I made it only to practice basics of Vue,<br> framework that I have recently picked up. I've learned a lot of things<br> building this app. The source code can be found <a class="text-blue-600" href="https://github.com/NinjaGamer107/BillTracker">here</a></p>
+                <br>
+            </div>
+        </div>
+    </div>
     <div v-if="bills.length">
         <div class="bg-gray-200 w-23/24 h-auto md:h-56 m-5 rounded-md text-gray-700 border border-purple-700">
             <div class="flex justify-center">
                 <h1 class="flex-row text-center text-2xl text-gray-800">Control panel</h1>
                 <button @click.prevent="findLateBills(); doIhaveEnoughMoney();"
-                    class="flex-row text-base text-gray-800 px-4 h-6 align-middle text-gray-700 bg-gray-400 m-2 ml-4 border border-purple-700 hover:text-gray-200 hover:bg-gray-500 rounded-md">
+                    class="flex-row text-base text-gray-800 bg-purple-500 rounded px-1 mt-1 ml-3 hover:text-gray-200 focus:outline-none">
                     Update
                 </button>
             </div>
@@ -151,28 +167,23 @@ Vue.component('view-bills', {
                 <p class="ml-1 mr-1">No</p>
             </div>
             <div class="flex p-3 justify-center">
-                <h3 v-if="canPayBills" class="flex-row text-base text-green-600">
+                <h3 v-if="(canPayBills != null) && canPayBills" class="flex-row text-base text-green-600">
                     You <b>can</b> pay all your bills with your budget
                 </h3>
-                <h3 v-else class="flex-row text-base text-red-600">
+                <h3 v-else-if="(canPayBills != null) && !canPayBills" class="flex-row text-base text-red-600">
                     You <b>can't</b> pay all your bills with your budget
                 </h3>
             </div>
             <div class="flex p-3 justify-center">
-                <h3 v-if="lateBills" class="flex-row text-base text-orange-600">
+                <h3 v-if="(lateBills != null) && lateBills" class="flex-row text-base text-orange-600">
                     You already forgot to pay {{ lateBills }} bills!
                 </h3>
-                <h3 v-else class="flex-row text-base text-blue-600">
+                <h3 v-else-if="(lateBills != null) && !lateBills" class="flex-row text-base text-blue-600">
                     You still have time to pay your bills
                 </h3>
             </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 flex">
-            <!--
-            <div v-show="!bills.length">
-                <p class="text-center">Couldn't find any bills!</p>
-            </div>
-            -->
             <div v-for="(bill, index) in bills"
                 class="max-w-sm rounded-lg overflow-hidden shadow-sm bg-purple-400 m-4 justify-around">
                 <div class="flex flex-col min-h-full">
@@ -216,6 +227,7 @@ Vue.component('view-bills', {
     
         </div>
     </div>
+</div>
     `,
     data: function() {
         return {
@@ -227,10 +239,8 @@ Vue.component('view-bills', {
     },
     methods: {
         findLateBills() {
+            this.lateBills = 0
             if(this.checkLateBills && this.bills.length) {
-                this.lateBills = 0
-                let currentDate = new Date()
-
                 this.bills.forEach((bill)=>{
                     let currentDate = new Date()
                     let date = new Date()
@@ -250,26 +260,22 @@ Vue.component('view-bills', {
                     }
                     else {
                         bill.expired = true
-                        this.lateBills += 1
+                        if(bill.expired = true)
+                            this.lateBills += 1
                     }
                 })
             }
-            else {
-                return
-            }
         },
         doIhaveEnoughMoney() {
-            let allOwingMoney = 0
-            this.budget = 0
-            this.bills.forEach((element)=>{
-                allOwingMoney += element.money
-            })
-            if(this.bills.length) {
-                /* Worse version of the code below
-                this.budget >= allOwingMoney ?
-                this.canPayBills = true :
-                this.canPayBills = false */
+            if(this.budget != null) {
+                let allOwingMoney = 0
+                this.bills.forEach((element)=>{
+                    allOwingMoney += element.money
+                })
                 this.canPayBills = (this.budget >= allOwingMoney) ? true : false
+            }
+            else {
+                console.log('Please specify your budget')
             }
         }
     }
@@ -316,7 +322,7 @@ const app = new Vue({
                 return
             else {
                 this.SelectedNavBar = this.NavBarElements[index].name
-                console.log(this.SelectedNavBar)
+                // console.log(this.SelectedNavBar)
             }
         },
         showFromNavSelection(comp) {

@@ -650,7 +650,7 @@ video {
   background-color: #718096;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 768px) {
   .navElement {
     font-size: 1.125rem;
   }

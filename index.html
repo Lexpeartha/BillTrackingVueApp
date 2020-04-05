@@ -7,13 +7,14 @@
     <link rel="stylesheet" href="./public/styles/styles.css"/>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js" defer></script>
     <script src="./public/scripts/index.js" defer></script>
+    <link med
 </head>
 <body class="bg-purple-300">
     <!-- Bill Tracker App -->
     <div id="app">
         <div id="navBar" class="bg-purple-500">
             <ul class="flex">
-                <li class="flex-1 text-center"
+                <li class="flex-auto text-center"
                     v-for="(nav,index) in NavBarElements">
                         <a class="navElement" 
                         v-on:click="updateNav(index, nav)"
@@ -28,6 +29,9 @@
         </add-bill>
         <view-bills v-show="showFromNavSelection('View your bills')" :bills="Bills"></view-bills>
         <contribute v-show="showFromNavSelection('Contribute to this project')"></contribute>
+        <footer class='w-full text-center text-gray-700 border-t border-purple-500 p-4 pin-b'>
+            This is project was made by NinjaGamer107
+        </footer>
     </div>
 </body>
 </html>
