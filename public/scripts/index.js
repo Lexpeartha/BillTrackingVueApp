@@ -98,7 +98,8 @@ Vue.component('add-bill', {
             description: null,
             date: null,
             method: null,
-            money: null
+            money: null,
+            expired: null
         }
     },
     methods: {
@@ -108,7 +109,8 @@ Vue.component('add-bill', {
                 description: this.description,
                 date: this.date,
                 method: this.method,
-                money: this.money
+                money: this.money,
+                expired: this.expired
             }
             if(newBill.name && newBill.date && newBill.money) {
                 this.$emit('send-bill', newBill)
@@ -126,50 +128,150 @@ Vue.component('view-bills', {
         }
     },
     template: `
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 flex">
-        <div v-show="!bills.length">
-            <p class="text-center">Couldn't find any bills!</p>
+    <div v-if="bills.length">
+        <div class="bg-gray-200 w-23/24 h-auto md:h-56 m-5 rounded-md text-gray-700 border border-purple-700">
+            <div class="flex justify-center">
+                <h1 class="flex-row text-center text-2xl text-gray-800">Control panel</h1>
+                <button @click.prevent="findLateBills(); doIhaveEnoughMoney();"
+                    class="flex-row text-base text-gray-800 px-4 h-6 align-middle text-gray-700 bg-gray-400 m-2 ml-4 border border-purple-700 hover:text-gray-200 hover:bg-gray-500 rounded-md">
+                    Update
+                </button>
+            </div>
+            <div class="flex p-3 justify-center">
+                <p class="flex-row text-sm mr-3">Enter your budget:</p>
+                <input required type="number" v-model.number="budget" placeholder="100$" class="bg-gray-100 focus:outline-none focus:bg-white" />
+            </div>
+            <div class="flex p-3 justify-center">
+                <p class="flex-row text-sm mr-3">Take into consideration the date?</p>
+                <input type="radio" id="yes" class=""
+                v-model="checkLateBills" v-bind:value="true"/>
+                <p class="ml-1 mr-1">Yes</p>
+                <input type="radio" checked id="no" class=""
+                v-model="checkLateBills" v-bind:value="false"/>
+                <p class="ml-1 mr-1">No</p>
+            </div>
+            <div class="flex p-3 justify-center">
+                <h3 v-if="canPayBills" class="flex-row text-base text-green-600">
+                    You <b>can</b> pay all your bills with your budget
+                </h3>
+                <h3 v-else class="flex-row text-base text-red-600">
+                    You <b>can't</b> pay all your bills with your budget
+                </h3>
+            </div>
+            <div class="flex p-3 justify-center">
+                <h3 v-if="lateBills" class="flex-row text-base text-orange-600">
+                    You already forgot to pay {{ lateBills }} bills!
+                </h3>
+                <h3 v-else class="flex-row text-base text-blue-600">
+                    You still have time to pay your bills
+                </h3>
+            </div>
         </div>
-        <div v-for="(bill, index) in bills"
-            class="max-w-sm rounded-lg overflow-hidden shadow-sm bg-purple-400 m-4">
-            <div class="flex flex-col min-h-full">
-            <div class="px-6 py-4 border-b border-gray-800">
-                <div class="text-2xl text-center text-gray-800">{{ bill.name }}</div>
-                <br>
-                <div class="flex text-gray-700">
-                    <p class="flex-row text-sm">Tags:</p>
-                    <span v-if="bill.money != null"
-                        class="inline-block bg-gray-200 rounded-full px-2 py-0 text-sm italic text-gray-700 mr-1 ml-1">{{ bill.money + '$' }}</span>
-                    <span v-if="bill.method != null"
-                        class="inline-block bg-gray-200 rounded-full px-2 py-0 text-sm italic text-gray-700 mr-1 ml-1">{{ bill.method }}</span>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 flex">
+            <!--
+            <div v-show="!bills.length">
+                <p class="text-center">Couldn't find any bills!</p>
+            </div>
+            -->
+            <div v-for="(bill, index) in bills"
+                class="max-w-sm rounded-lg overflow-hidden shadow-sm bg-purple-400 m-4 justify-around">
+                <div class="flex flex-col min-h-full">
+                    <div class="px-6 py-4 border-b border-gray-800">
+                        <div class="text-2xl text-center text-gray-800">{{ bill.name }}</div>
+                        <br>
+                        <div class="flex text-gray-700">
+                            <p class="flex-row text-sm">Tags:</p>
+                            <span v-if="bill.money != null"
+                                class="inline-block bg-gray-200 rounded-full px-2 py-0 text-sm italic text-gray-700 mr-1 ml-1">{{ bill.money + '$' }}</span>
+                            <span v-if="bill.method != null"
+                                class="inline-block bg-gray-200 rounded-full px-2 py-0 text-sm italic text-gray-700 mr-1 ml-1">{{ bill.method }}</span>
+                            <span v-if="bill.expired == false && bill.expired != null"
+                                class="inline-block bg-red-500 rounded-full px-2 py-0 text-sm italic text-gray-800 mr-1 ml-1">Late!</span>
+                        </div>
+                    </div>
+                    <div class="px-6 py-8 flex-grow">
+                        <p class="text-gray-700 text-left text-xl">
+                            Description:
+                        </p>
+                        <p class="text-gray-700 text-base">
+                            {{ bill.description }}
+                        </p>
+                    </div>
+                    <div class="px-6 py-8 flex-grow">
+                        <p class="text-gray-700 text-left text-xl">
+                            The Bill is due:
+                        </p>
+                        <p class="text-gray-700 text-base">
+                            {{ bill.date }}
+                        </p>
+                    </div>
+                    <div class="px-5 py-3 border-t border-gray-800 bg-purple-500 flex justify-end">
+                        <button
+                            class="btn-gradient-default text-gray-800 font-medium text-sm py-1 px-5 rounded mr-3 hover:text-gray-200">Edit</button>
+                        <button
+                            class="btn-gradient-default text-gray-800 font-medium text-sm py-1 px-5 rounded mr-3 hover:text-gray-200">Delete</button>
+                    </div>
                 </div>
             </div>
-            <div class="px-6 py-8 flex-grow">
-                <p class="text-gray-700 text-left text-xl">
-                    Description:
-                </p>
-                <p class="text-gray-700 text-base">
-                    {{ bill.description }}
-                </p>
-            </div>
-            <div class="px-6 py-8 flex-grow">
-                <p class="text-gray-700 text-left text-xl">
-                    The Bill is due:
-                </p>
-                <p class="text-gray-700 text-base">
-                    {{ bill.date }}
-                </p>
-            </div>
-            <div class="px-5 py-3 border-t border-gray-800 bg-purple-500 flex justify-end">
-                <button class="btn-gradient-default text-gray-800 font-medium text-sm py-1 px-5 rounded mr-3 hover:text-gray-200">Edit</button>
-                <button class="btn-gradient-default text-gray-800 font-medium text-sm py-1 px-5 rounded mr-3 hover:text-gray-200">Delete</button>
-            </div>
-            </div>
+    
         </div>
     </div>
     `,
+    data: function() {
+        return {
+            lateBills: null,
+            checkLateBills: false,
+            budget: null,
+            canPayBills: null
+        }
+    },
     methods: {
+        findLateBills() {
+            if(this.checkLateBills && this.bills.length) {
+                this.lateBills = 0
+                let currentDate = new Date()
 
+                this.bills.forEach((bill)=>{
+                    let currentDate = new Date()
+                    let date = new Date()
+
+                    let stringyDate = bill.date
+                    let y = parseInt(String(stringyDate).substring(0, 4))
+                    let m = parseInt(String(stringyDate).substring(5, 7))-1
+                    let d = parseInt(String(stringyDate).substring(8))
+
+                    date.setDate(d)
+                    date.setMonth(m)
+                    date.setFullYear(y)
+                    date.setHours(0)
+
+                    if(currentDate.getTime() >= date.getTime()) {
+                        bill.expired = false
+                    }
+                    else {
+                        bill.expired = true
+                        this.lateBills += 1
+                    }
+                })
+            }
+            else {
+                return
+            }
+        },
+        doIhaveEnoughMoney() {
+            let allOwingMoney = 0
+            this.budget = 0
+            this.bills.forEach((element)=>{
+                allOwingMoney += element.money
+            })
+            if(this.bills.length) {
+                /* Worse version of the code below
+                this.budget >= allOwingMoney ?
+                this.canPayBills = true :
+                this.canPayBills = false */
+                this.canPayBills = (this.budget >= allOwingMoney) ? true : false
+            }
+        }
     }
 })
 
@@ -180,7 +282,7 @@ Vue.component('contribute', {
         </div>
     `,
     methods: {
-
+        
     }
 })
 
