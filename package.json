@@ -1,0 +1,20 @@
+{
+  "name": "bill_tracker",
+  "version": "1.0.0",
+  "description": "Bill tracking App",
+  "main": "index.js",
+  "scripts": {
+    "build": "postcss ./public/styles/tailwind.css -o ./public/styles/styles.css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "autoprefixer": "^9.7.5",
+    "postcss-cli": "^7.1.0",
+    "tailwindcss": "^1.2.0"
+  },
+  "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^2.1.0"
+  }
+}

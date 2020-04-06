@@ -1,0 +1,37 @@
+/* purgecss start ignore */
+@tailwind base;
+@tailwind components;
+/* purgecss end ignore */
+
+.navElement {
+    @apply text-center;
+    @apply text-xs;
+    @apply font-bold;
+    @apply tracking-wider;
+    @apply block;
+    @apply py-4;
+    @apply px-4;
+    @apply bg-purple-500;
+    @apply text-gray-200;
+}
+
+.navElement:hover {
+    @apply bg-purple-600;
+}
+
+.disabledNavElement{
+    @apply bg-gray-500;
+    @apply cursor-not-allowed;
+}
+
+.disabledNavElement:hover{
+    @apply bg-gray-600;
+}
+
+@screen md {
+    .navElement {
+        @apply text-lg;
+    }
+}
+
+@tailwind utilities;
