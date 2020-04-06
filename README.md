@@ -1,2 +1,45 @@
-# BillTrackingVueApp
-Single Page Application I made to learn basics of VueJS Framwork
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill Tracker</title>
+    <link rel="stylesheet" href="./public/styles/styles.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/vue" defer></script>
+    <script src="./public/scripts/index.js" defer></script>
+    <link med
+</head>
+<body class="bg-purple-300">
+    <!-- Bill Tracker App -->
+    <div id="app">
+        <div id="navBar" class="bg-purple-500">
+            <ul class="flex">
+                <li class="flex-auto text-center"
+                    v-for="(nav,index) in NavBarElements">
+                        <a class="navElement" 
+                        v-on:click="updateNav(index, nav)"
+                        :class="{disabledNavElement: nav.isDisabled}"
+                        href="#">{{ nav.name }}</a>
+                </li>
+            </ul>
+        </div>
+        <about v-show="showFromNavSelection('About')"></about>
+        <add-bill v-show="showFromNavSelection('Create a bill')" 
+            @send-bill="addToBills">
+        </add-bill>
+        <view-bills v-show="showFromNavSelection('View your bills')" :bills="Bills"></view-bills>
+        <contribute v-show="showFromNavSelection('Contribute to this project')"></contribute>
+        <footer class='w-full text-center text-gray-700 border-t border-purple-500 p-4 pin-b'>
+            This project was made by NinjaGamer107
+            <div class="flex float-right">
+                <a href="https://discord.gg/qBXrNda" target="_blank">
+                    <img src="public/images/discord-logo.svg" class="h-12 px-1 py-1"/>
+                </a>
+                <a href="https://github.com/NinjaGamer107" target="_blank">
+                    <img src="public/images/github-logo.svg" class="h-12 px-1 py-1"/>
+                </a>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
