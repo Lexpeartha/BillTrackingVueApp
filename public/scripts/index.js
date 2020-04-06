@@ -9,7 +9,7 @@ Vue.component('about', {
             <div class="text-xl md:text-2xl pt-6 opacity-100">
                 <p>Ever wanted to find quick and easy way to check<br> can you pay all bills you currently have with certain budgets?<br> Or to maintain how many of those bills expired?<br> If so, this app is for you!</p>
                 <br> <br>
-                <p>This is my first project, and I made it only to practice basics of Vue,<br> framework that I have recently picked up. I've learned a lot of things<br> building this app. The source code can be found <a class="text-blue-600" href="https://github.com/NinjaGamer107/BillTracker">here</a></p>
+                <p>This is my first project, and I made it only to practice basics of Vue,<br> framework that I have recently picked up. I've learned a lot of things<br> building this app. The source code can be found <a class="text-blue-600" href="https://github.com/NinjaGamer107/BillTrackingVueApp">here</a></p>
                 <br>
             </div>
         </div>
