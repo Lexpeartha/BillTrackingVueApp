@@ -6,7 +6,7 @@ Vue.component('about', {
             <h1 class="text-5xl md:text-6xl pt-3 text-gray-900">About this project</h1>
         </div>
         <div class="text-center text-purple-800">
-            <div class="text-2xl pt-6 opacity-100">
+            <div class="text-xl md:text-2xl pt-6 opacity-100">
                 <p>Ever wanted to find quick and easy way to check<br> can you pay all bills you currently have with certain budgets?<br> Or to maintain how many of those bills expired?<br> If so, this app is for you!</p>
                 <br> <br>
                 <p>This is my first project, and I made it only to practice basics of Vue,<br> framework that I have recently picked up. I've learned a lot of things<br> building this app. The source code can be found <a class="text-blue-600" href="https://github.com/NinjaGamer107/BillTracker">here</a></p>
@@ -136,7 +136,7 @@ Vue.component('view-bills', {
     <div v-show="!bills.length">
         <h1 class="text-5xl md:text-6xl text-gray-700 text-center mb-4">There's nothing here to show</h1>
         <div class="text-center text-purple-800">
-            <div class="text-2xl pt-6">
+            <div class="text-xl md:text-2xl pt-6">
                 <p>Having trouble using this app? Just make a bill, and all your bills will appear<br> here along with control panel! From there, you should <br> be able to check everything you need :)</p>
                 <br> <br>
                 <p>This project was made with following technologies: <br></p>
