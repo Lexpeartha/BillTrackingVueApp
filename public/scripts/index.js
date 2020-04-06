@@ -82,7 +82,7 @@ Vue.component('add-bill', {
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-zip">
                     Bill Expense (in $)
                 </label>
-                <input required v-model.number="money"
+                <input required v-model.number="money" min=1
                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-gray-100 focus:border-gray-500"
                     id="grid-zip" type="number" placeholder="100">
             </div>
@@ -136,19 +136,25 @@ Vue.component('view-bills', {
     <div v-show="!bills.length">
         <h1 class="text-5xl md:text-6xl text-gray-700 text-center mb-4">There's nothing here to show</h1>
         <div class="text-center text-purple-800">
-            <div class="text-2xl pt-6 opacity-100">
+            <div class="text-2xl pt-6">
                 <p>Having trouble using this app? Just make a bill, and all your bills will appear<br> here along with control panel! From there, you should <br> be able to check everything you need :)</p>
                 <br> <br>
-                <p>This is my first project, and I made it only to practice basics of Vue,<br> framework that I have recently picked up. I've learned a lot of things<br> building this app. The source code can be found <a class="text-blue-600" href="https://github.com/NinjaGamer107/BillTracker">here</a></p>
+                <p>This project was made with following technologies: <br></p>
+                <ul class="list-disc">
+                    <li>HTML5 for structuring the DOM</li>
+                    <li>Vue.js for dynamicly displaying and showing everything</li>
+                    <li>TailwindCSS to make styling so mych easier</li>
+                </ul>
                 <br>
             </div>
         </div>
     </div>
     <div v-if="bills.length">
-        <div class="bg-gray-200 w-23/24 h-auto md:h-56 m-5 rounded-md text-gray-700 border border-purple-700">
+        <div class="flex flex-wrap bg-gray-200 w-auto h-auto m-5 rounded-md text-gray-700 border border-purple-700">
+        <div class="flex-auto">
             <div class="flex justify-center">
                 <h1 class="flex-row text-center text-2xl text-gray-800">Control panel</h1>
-                <button @click.prevent="findLateBills(); doIhaveEnoughMoney();"
+                <button @click.prevent="updateButton()"
                     class="flex-row text-base text-gray-800 bg-purple-500 rounded px-1 mt-1 ml-3 hover:text-gray-200 focus:outline-none">
                     Update
                 </button>
@@ -182,6 +188,44 @@ Vue.component('view-bills', {
                     You still have time to pay your bills
                 </h3>
             </div>
+        </div>                     <!-- Editing panel here -->
+            <div v-show="editingMode != false" class="flex-auto">
+                <div class="p-1 text-center">
+                    <p>Insert new name for the selected bill:</p>
+                    <input v-model.lazy="bills[editIndexedBill].name" class="ml-2" type="text">
+                </div>
+                <div class="p-1 text-center">
+                    <p>Insert new description for the selected bill:</p>
+                    <input v-model.lazy="bills[editIndexedBill].description" class="ml-2" type="text">
+                </div>
+                <div class="p-1 text-center">
+                    <p>Insert new date for the selected bill:</p>
+                    <input v-model.lazy="bills[editIndexedBill].date" class="ml-2" type="date">
+                </div>
+                <div class="p-1 text-center">
+                    <p>Insert new payment method for selected bill:</p>
+                    <select v-model.lazy="bills[editIndexedBill].method"
+                        class="ml-2"
+                        id="grid-state">
+                            <option selected="selected">Cash</option>
+                            <option>Check</option>
+                            <option>Online Payment</option>
+                            <option>Automated phone call</option>
+                            <option>Automated draft</option>
+                    </select>
+                </div>
+
+                <div class="p-1 text-center">
+                    <p>Insert amount of money for the selected bill:</p>
+                    <input v-model.lazy.number="bills[editIndexedBill].money" class="ml-2" type="number" min=1>
+                </div>
+                <div class="p-1 text-center">
+                    <button styles=""
+                    @click="closeEditing">
+                        Finish editing
+                    </button>
+                </div>
+            </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 flex">
             <div v-for="(bill, index) in bills"
@@ -196,7 +240,7 @@ Vue.component('view-bills', {
                                 class="inline-block bg-gray-200 rounded-full px-2 py-0 text-sm italic text-gray-700 mr-1 ml-1">{{ bill.money + '$' }}</span>
                             <span v-if="bill.method != null"
                                 class="inline-block bg-gray-200 rounded-full px-2 py-0 text-sm italic text-gray-700 mr-1 ml-1">{{ bill.method }}</span>
-                            <span v-if="bill.expired == false && bill.expired != null"
+                            <span v-if="bill.expired && (bill.expired != null)"
                                 class="inline-block bg-red-500 rounded-full px-2 py-0 text-sm italic text-gray-800 mr-1 ml-1">Late!</span>
                         </div>
                     </div>
@@ -217,9 +261,9 @@ Vue.component('view-bills', {
                         </p>
                     </div>
                     <div class="px-5 py-3 border-t border-gray-800 bg-purple-500 flex justify-end">
-                        <button
+                        <button @click="editBill(index)"
                             class="btn-gradient-default text-gray-800 font-medium text-sm py-1 px-5 rounded mr-3 hover:text-gray-200">Edit</button>
-                        <button
+                        <button @click="removeBill(index)"
                             class="btn-gradient-default text-gray-800 font-medium text-sm py-1 px-5 rounded mr-3 hover:text-gray-200">Delete</button>
                     </div>
                 </div>
@@ -234,15 +278,26 @@ Vue.component('view-bills', {
             lateBills: null,
             checkLateBills: false,
             budget: null,
-            canPayBills: null
+            allOwingMoney: null,
+            editIndexedBill: 0,
+            editingMode: false
         }
     },
     methods: {
+        updateButton() {
+            if(!this.editingMode) {
+                this.findLateBills()
+                this.doIhaveEnoughMoney()
+            }
+            else {
+                alert('Please finish editing first')
+            }
+        },
         findLateBills() {
-            this.lateBills = 0
-            if(this.checkLateBills && this.bills.length) {
+            if(this.checkLateBills) {
+                this.lateBills = 0
                 this.bills.forEach((bill)=>{
-                    let currentDate = new Date()
+                    let today = new Date()
                     let date = new Date()
 
                     let stringyDate = bill.date
@@ -255,30 +310,61 @@ Vue.component('view-bills', {
                     date.setFullYear(y)
                     date.setHours(0)
 
-                    if(currentDate.getTime() >= date.getTime()) {
+                    if(date.getTime() >= today.getTime()) {
                         bill.expired = false
                     }
                     else {
                         bill.expired = true
-                        if(bill.expired = true)
-                            this.lateBills += 1
+                        this.lateBills += 1
                     }
                 })
+            }
+            if(!this.checkLateBills) {
+                this.lateBills = null
             }
         },
         doIhaveEnoughMoney() {
             if(this.budget != null) {
-                let allOwingMoney = 0
+                this.allOwingMoney = 0
                 this.bills.forEach((element)=>{
-                    allOwingMoney += element.money
+                    this.allOwingMoney += element.money
                 })
-                this.canPayBills = (this.budget >= allOwingMoney) ? true : false
             }
             else {
-                console.log('Please specify your budget')
+                alert('Insert your budget first!')
+            }
+        },
+        removeBill(position) {
+            if(this.editingMode == false) {
+                this.bills.splice(position, 1)
+            }
+            else {
+                alert('Please finish editing first!')
+            }
+        },
+        editBill(position) {
+            if(this.editingMode == false) {
+                this.editingMode = true
+                this.editIndexedBill = position
+            }
+            else {
+                alert('In order to do that, please finish current process of editing')
+            }
+        },
+        closeEditing() {
+            this.editingMode =  false
+        }
+    },
+    computed: {
+        canPayBills() {
+            if(this.budget != null && this.allOwingMoney != null) {
+                return (this.budget >= this.allOwingMoney) ? true : false
+            }
+            else {
+                return null
             }
         }
-    }
+    },
 })
 
 Vue.component('contribute', {
@@ -286,10 +372,7 @@ Vue.component('contribute', {
         <div>
             <h1 class="text-center text-4xl">Contribute</h1>
         </div>
-    `,
-    methods: {
-        
-    }
+    `
 })
 
 const app = new Vue({
